@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     // login 로직 시작
     // loginId를 이용하여 DB 에서 User 객체를 가져옵니다.

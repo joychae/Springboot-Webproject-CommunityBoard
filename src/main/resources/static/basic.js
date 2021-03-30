@@ -110,5 +110,39 @@ function deleteComment(id) {
         return;
     }
 
+    // 댓글을 수정합니다!!
+    function showEdits(id) {
+        $('editarea').show();
+        $('submit').show();
+        $('delete').show();
+
+        $('content').hide();
+        $('edit').hide();
+    }
+
+    function editComment(id) {
+        showEdits(id);
+        let content = $('content').text().trim();
+        $('edit-textarea').val(content);
+    }
+
+    function submitEdit(id) {
+        let content = $('content').text().trim();
+
+        // 3. 전달할 data JSON으로 만듭니다.
+        let data = {'contents': contents};
+
+        // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+        $.ajax({
+            type: "PUT",
+            url: `/api/memos/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('메시지 변경에 성공하였습니다.');
+                window.location.reload();
+            }
+        });
+    }
 }
 

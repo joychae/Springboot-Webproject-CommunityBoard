@@ -61,9 +61,11 @@
                     <div class="card-body">
                         <h6 th:text="${comment.created_by}" class="card-subtitle mb-2 text-muted"></h6>
                         <p th:text="${comment.modifiedAt}" class="card-text"></p>
-                        <p th:text="${comment.content}" class="card-text"></p>
+                        <p th:text="${comment.content}" id="content" class="card-text"></p>
+                        <textarea id="editarea" style="display: none" cols="30" rows="5"></textarea>
                         <a th:if="${userName.equals(comment.created_by)}" href="#" class="card-link">댓글 수정하기</a>
                         <a th:if="${userName.equals(comment.created_by)}" th:onclick="'deleteComment('+${comment.id}+')'" href="#" class="card-link">댓글 삭제하기</a>
+                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'editComment('+${comment.id}+')'" style="display: none" href="#" class="card-link">댓글 수정하기</a>
                     </div>
                 </div>
             </div>
