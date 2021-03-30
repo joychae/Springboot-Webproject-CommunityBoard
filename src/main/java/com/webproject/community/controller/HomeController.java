@@ -22,6 +22,9 @@ public class HomeController {
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());
         }
+        if (userDetails == null) {
+            model.addAttribute("message","로그인이 필요한 기능입니다." );
+        }
         return "index";
     }
 

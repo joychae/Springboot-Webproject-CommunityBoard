@@ -27,7 +27,6 @@
 <div class="card">
     <h5 class="card-header" style="text-align: center;">프로그래밍 공부 노하우를 나누는 곳입니다</h5>
     <div class="card-body">
-
         <!--        로그인 버튼, 회원가입 버튼-->
         <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/login'" style="margin-left: 10px; margin-bottom: 20px">로그인
         </button>
@@ -36,7 +35,20 @@
         <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/signup'">회원가입
         </button>
         <!--        글 작성하기 버튼-->
-        <button type="button" class="btn btn-primary btn-sm"
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            function loginalert() {
+                alert([[${message}]]);
+                location.href='/user/login';
+            }
+            /*]]>*/
+        </script>
+<!--        로그인을 안한 유저를 위한 버튼-->
+        <button th:if="${userName} == null" th:onclick="loginalert()" type="button" class="btn btn-primary btn-sm"
+                >글 작성하기
+        </button>
+<!--        로그인 한 유저를 위한 버튼-->
+        <button th:if="${userName} != null" type="button" class="btn btn-primary btn-sm"
                 onclick="location.href='/post/write'">글 작성하기
         </button>
 

@@ -52,4 +52,8 @@ public class Comment extends Timestamped {
         this.deleted = false;
     }
 
+    public void update(CommentRequestDto requestDto) {
+        this.content = requestDto.getContent();
+    }
+
 }

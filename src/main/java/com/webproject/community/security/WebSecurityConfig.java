@@ -37,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/post/read/**").permitAll()
+                // 코멘트 여는건 테스트!
+                .antMatchers("/comment").permitAll()
                 .antMatchers("/api/memos/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 // 그 외 모든 요청은 인증과정 필요

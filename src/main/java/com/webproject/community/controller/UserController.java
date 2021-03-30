@@ -29,6 +29,14 @@ public class UserController {
         return "login";
     }
 
+    // 카카오 로그인 및 자동 로그인 처리 되었을 때, index 페이지 반환
+    @GetMapping("/user/kakao/callback")
+    public String kakaoLogin(String code) {
+        // authorizedCode: 카카오 서버로부터 받은 인가 코드
+        userService.kakaoLogin(code);
+        return "redirect:/";
+    }
+
     // 회원 가입 페이지
     @GetMapping("/user/signup")
     public String signup() {
@@ -50,11 +58,4 @@ public class UserController {
         return "redirect:/";
     }
 
-    // 카카오 로그인 및 자동 로그인 처리 되었을 때, index 페이지 반환
-    @GetMapping("/user/kakao/callback")
-    public String kakaoLogin(String code) {
-        // authorizedCode: 카카오 서버로부터 받은 인가 코드
-        userService.kakaoLogin(code);
-        return "redirect:/";
-    }
 }

@@ -7,10 +7,7 @@ import com.webproject.community.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,5 +26,22 @@ public class CommentController {
         Comment comment = commentService.createComment(requestDto);
         return comment;
     }
+
+    // 댓글을 삭제하는 기능입니다.
+    @ResponseBody
+    @DeleteMapping("/api/comments/{id}")
+    public Long deleteComment(@PathVariable Long id) {
+        return commentService.deleteComment(id);
+    }
+
+    // 댓글을 수정하는 기능입니다.
+    @ResponseBody
+    @PutMapping("/api/comments/{id}")
+    public Long updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.commentUpdate(id, commentRequestDto);
+        return id;
+    }
+
+
 
 }

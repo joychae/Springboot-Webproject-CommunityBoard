@@ -23,7 +23,23 @@ public class CommentService {
         return comment;
     }
 
+    // 댓글 조회 기능
     public List<Comment> getComments(Long memoId) {
         return commentRepository.findByMemoIdOrderByModifiedAtDesc(memoId);
+    }
+
+    // 댓글 삭제 기능
+    public Long deleteComment(Long id) {
+       commentRepository.deleteById(id);
+       return id;
+    }
+
+    // 댓글 수정 기능
+    public Long commentUpdate(Long id, CommentRequestDto requestDto) {
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                ()->new IllegalArgumentException("해당 댓글이 존재하지 않습니다")
+        );
+        comment.update(requestDto);
+        return comment.getId();
     }
 }

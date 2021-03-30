@@ -95,3 +95,20 @@ function writeComment() {
     });
 }
 
+// 댓글을 삭제합니다.
+function deleteComment(id) {
+    if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
+        $.ajax({
+            type: "DELETE",
+            url: `/api/comments/${id}`,
+            success: function (response) {
+                alert('메시지 삭제에 성공하였습니다.');
+                window.location.reload();
+            }
+        });
+    } else {
+        return;
+    }
+
+}
+
