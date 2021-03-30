@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="/basic.js"></script>
+
+    <title>게시판 목록</title>
+
+</head>
+<div class="card">
+    <h5 class="card-header" style="text-align: center;">프로그래밍 공부 노하우를 나누는 곳입니다</h5>
+    <div class="card-body">
+
+        <!--        로그인 버튼, 회원가입 버튼-->
+        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/login'" style="margin-left: 10px; margin-bottom: 20px">로그인
+        </button>
+        <button th:if="${userName} != null" type="button" class="btn btn-secondary btn-sm float-right" style="margin-left: 10px; margin-bottom: 20px">로그아웃
+        </button>
+        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/signup'">회원가입
+        </button>
+        <!--        글 작성하기 버튼-->
+        <button type="button" class="btn btn-primary btn-sm"
+                onclick="location.href='/post/write'">글 작성하기
+        </button>
+
+        <!--        게시글 조회 테이블-->
+        <table class="table" style="cursor: pointer;">
+            <thead>
+            <tr>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
+            </tr>
+            </thead>
+            <tbody id="postings">
+            <tr>
+                <th scope="row"> 4월 2일</th>
+                <td>채수연</td>
+                <td>Spring Boot관련 질문드립니다.</td>
+            </tr>
+            <tr>
+                <th scope="row">4월 3일</th>
+                <td>채수연</td>
+                <td>스프링 공부 어떻게 해야 할 지 조언 구합니다</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+</body>
+
+</html>

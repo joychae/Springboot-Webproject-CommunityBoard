@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
+    <!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="/basic.js"></script>
+
+    <title>게시글 보기</title>
+</head>
+
+<body>
+<div id="posting-each">
+    <div class="card">
+        <h5 th:text="${memo.title}" class="card-header"></h5>
+        <!--    게시글 내용 조회 -->
+        <div class="card-body">
+            <h5 th:text="${memo.usernameId}" class="card-title"></h5>
+            <p th:text="${memo.modifiedAt}" class="card-text"></p>
+            <p th:text="${memo.contents}" class="card-text"></p>
+
+            <!--        댓글 작성 -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="comment" placeholder="댓글을 남겨주세요"
+                       aria-label="Recipient's username"
+                       aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="writeComment()">댓글 작성하기</button>
+                </div>
+            </div>
+
+            <!--        댓글 조회 -->
+            <div  id="comment-area">
+                <div th:each="comment: ${commentlist}" class="card">
+                    <div class="card-body">
+                        <h6 th:text="${comment.created_by}" class="card-subtitle mb-2 text-muted"></h6>
+                        <p th:text="${comment.modifiedAt}" class="card-text"></p>
+                        <p th:text="${comment.content}" class="card-text"></p>
+                        <a th:if="${userName.equals(comment.created_by)}" href="#" class="card-link">댓글 수정하기</a>
+                        <a th:if="${userName.equals(comment.created_by)}" href="#" class="card-link">댓글 삭제하기</a>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" style="margin-top:20px;"
+                    onclick="location.href='/'">목록으로 돌아가기
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
