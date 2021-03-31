@@ -157,6 +157,61 @@ Entity Table Structure
 
 </br>
 
-1. 회원가입 페이지
------------------
+회원가입 페이지
+---------------
+
+```java
+    // 일반 회원가입 기능을 처리하는 메소드
+    public void registerUser(SignupRequestDto requestDto) {
+        String username = requestDto.getUsername();
+
+        // 사용자 ID에 알파벳과 숫자만 포함시키기 위한 정규표현식 구현
+        Pattern usernamePattern = Pattern.compile("(^[a-zA-Z0-9]*$)");
+        Matcher usernameMatcher = usernamePattern.matcher(requestDto.getUsername());
+
+        // 회원 ID 중복 확인
+        // 어떤 때 List 대신 Optional이 쓰이는 지 공부해놓을 필요가 있음
+        Optional<User> found = userRepository.findByUsername(username);
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자 ID가 존재합니다.");
+        } else if (requestDto.getUsername().length() < 3) {
+            throw new IllegalArgumentException("사용자 ID는 최소 3자 이상이어야 합니다");
+        } else if (usernameMatcher.find() == false) {
+            throw new IllegalArgumentException("사용자 ID는 알파벳 대소문자와 숫자만 사용가능합니다");
+        } else if (requestDto.getPassword().length() < 4) {
+            throw new IllegalArgumentException("비밀번호는 최소 4자 이상이어야 합니다");
+        } else if (requestDto.getPassword().contains(requestDto.getUsername())) {
+            throw new IllegalArgumentException("비밀번호에 사용자 ID가 포함되지 않아야 합니다");
+        } else if (!(requestDto.getPassword().equals(requestDto.getPwcheck()))) {
+            throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다");
+        }
+
+        //패스워드 인코딩
+        String password = passwordEncoder.encode(requestDto.getPassword());
+        // 별다른 처리가 필요없는 이메일 값 가져오기
+        String email = requestDto.getEmail();
+
+        // user 객체를 하나 생성해 DB에 저장하기
+        User user = new User(username, password, email);
+        userRepository.save(user);
+    }
+```
+
+- 가입 조건을 확인하는 로직은 User Entity에 구현할 수도 있지만, Entity Table을 최대한 깨끗하게 관리하기 위해 UserService 내의 메소드로 기입 조건을 확인하는 로직을 구현했습니다.
+- Entity Table을 깨끗하게 관리하는 이유는 두 가지를 꼽을 수 있겠습니다. 첫째, Entity 테이블에 해당하는 코드만 보고도 연결되어 있는 DB Table Column의 구성 요소를 확인하기 위함입니다. 둘째, 어떠한 매개변수와 Dto를 활용해 생성자를 만드는 지 한눈에 파악하기 위함입니다. 따라서 저는 이번프로젝트에서 Entity 코드에는 Column 내용과 생성자, 업데이트 로직만을 구현하였습니다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
