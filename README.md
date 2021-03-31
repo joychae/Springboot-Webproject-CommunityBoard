@@ -7,7 +7,7 @@ SpringBoot WebProject : CommunityBoard - 프로그래밍 노하우 나눔 공간
 
 ### 개발 언어  
 > Backend: Java  
-> Frontend: javascript  
+> Frontend: html, css, javascript (html, css는 부트스트랩을 활용하였습니다.)
 
 ### 개발 환경  
 > Java: JDK 1.8.0  
@@ -18,4 +18,5 @@ SpringBoot WebProject : CommunityBoard - 프로그래밍 노하우 나눔 공간
 > > View Template Engine: thymeleaf  
 > > Sub-Framework: Spring security  
 > > Test-Framework: junit5  
+
 
