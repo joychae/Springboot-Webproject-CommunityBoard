@@ -31,7 +31,7 @@ public class MemoService {
 
     // 게시글 자세히 보기
     public Memo getEachMemo(Long id) {
-        Memo memo = memoRepository.findById(id). orElseThrow(
+        Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("찾는 포스팅이 존재하지 않습니다")
         );
         return memo;
@@ -39,5 +39,10 @@ public class MemoService {
 
     public List<Memo> getMemoByUser(Long accountId) {
         return memoRepository.findByUserIdOrderByModifiedAtDesc(accountId);
+    }
+
+    @Transactional
+    public List<Memo> memoSearch(String keyword) {
+        return memoRepository.findByTitleContaining(keyword);
     }
 }

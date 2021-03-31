@@ -1,10 +1,5 @@
 let targetId;
 
-// HTML 문서를 로드할 때마다 실행합니다.
-$(document).ready(function () {
-    getMessages();
-})
-
 // 내용 유효성 검증 함수입니다.
 function isValidContents(contents) {
     if (contents == '') {

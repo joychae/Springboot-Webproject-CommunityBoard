@@ -25,30 +25,18 @@
 
 </head>
 <div class="card">
-    <h5 class="card-header" style="text-align: center;">프로그래밍 공부 노하우를 나누는 곳입니다</h5>
+    <h5 class="card-header" style="text-align: center;">게시글 검색결과</h5>
     <div class="card-body">
         <!--        로그인 버튼, 회원가입 버튼-->
-        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right"
-                onclick="location.href='/user/login'" style="margin-left: 10px; margin-bottom: 20px">로그인
-        </button>
-        <button th:if="${userName} != null" type="button" class="btn btn-secondary btn-sm float-right"
-                onclick="location.href='/user/logout'" style="margin-left: 10px; margin-bottom: 20px">로그아웃
-        </button>
-        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right"
-                onclick="location.href='/user/signup'">회원가입
-        </button>
-        <button th:if="${userName} != null" th:text="${userName}+' 마이페이지'"
-                th:onclick="|location.href='/post/user/${accountId}'|" type="button"
-                class="btn btn-secondary btn-sm float-right">
+        <button type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/'" style="margin-left: 10px; margin-bottom: 20px">홈으로 돌아가기
         </button>
         <!--        글 작성하기 버튼-->
         <script type="text/javascript" th:inline="javascript">
             /*<![CDATA[*/
             function loginalert() {
                 alert("로그인이 필요한 기능입니다");
-                location.href = '/user/login';
+                location.href='/user/login';
             }
-
             /*]]>*/
         </script>
         <!--        로그인을 안한 유저를 위한 버튼-->
@@ -66,31 +54,18 @@
             <tr>
                 <th scope="col">제목</th>
                 <th scope="col">작성자</th>
-                <th scope="col">조회수</th>
                 <th scope="col">작성일</th>
             </tr>
             </thead>
-            <tbody th:each="allmemo: ${allmemolist}">
-            <tr th:onclick="|location.href = '/post/read/${allmemo.memoId}'|">
-                <th th:text="${allmemo.title}" scope="row"></th>
-                <td>
-                    <a th:text="${allmemo.usernameId}" th:href="'/post/user/'+${allmemo.userId}"></a>
-                </td>
-                <td th:text="${view}"></td>
-                <td th:text="${allmemo.modifiedAt}"></td>
+            <tbody th:each="search: ${searchlist}">
+            <tr>
+                <th th:text="${search.title}" scope="row"></th>
+                <td th:text="${search.usernameId}" ></td>
+                <td th:text="${search.modifiedAt}" ></td>
             </tr>
             </tbody>
         </table>
-<!--        <form action="/" method="GET">-->
-<!--            <div class="input-group mb-3">-->
-<!--                <div class="input-group-prepend">-->
-<!--                <span class="input-group-text" id="inputGroup-sizing-default"-->
-<!--                      th:onclick="|onlocation.href='/post/search/${query}'|">게시글 검색하기</span>-->
-<!--                </div>-->
-<!--                <input id="keyword" value="query" type="text" class="form-control" aria-label="Default"-->
-<!--                       aria-describedby="inputGroup-sizing-default">-->
-<!--            </div>-->
-<!--        </form>-->
+
     </div>
 </div>
 </body>

@@ -1,17 +1,21 @@
 package com.webproject.community.controller;
 
+import com.webproject.community.model.entity.Memo;
 import com.webproject.community.model.entity.User;
 import com.webproject.community.repository.UserRepository;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
 import com.webproject.community.service.MemoService;
+import com.webproject.community.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -20,14 +24,15 @@ public class HomeController {
 
     private final MemoService memoService;
     private final CommentService commentService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         model.addAttribute("allmemolist", memoService.getAllMemos());
+        // model.addAttribute("query", query);
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());
-            Optional<User> users = userRepository.findByUsername(userDetails.getUsername());
+            Optional<User> users = userService.findByUsername(userDetails.getUsername());
             Long accountId = users.get().getAccountId();
             model.addAttribute("accountId", accountId);
         }
@@ -66,5 +71,13 @@ public class HomeController {
             model.addAttribute("userName", userDetails.getUser().getUsername());
         }
         return "mypage";
+    }
+
+    // 검색화면
+    @GetMapping("/post/search/{query}")
+    public String search(@PathVariable String query, Model model) {
+        List<Memo> searchList = memoService.memoSearch(query);
+        model.addAttribute("searchlist", searchList);
+        return "search";
     }
 }

@@ -103,4 +103,9 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    // user별로 작성한 글 찾아오기
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

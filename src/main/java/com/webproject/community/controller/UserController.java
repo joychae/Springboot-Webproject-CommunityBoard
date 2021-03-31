@@ -37,13 +37,15 @@ public class UserController {
         return "redirect:/";
     }
 
-    // 회원 가입 페이지
+    // 회원 가입을 처리할 url과 signup.html 뷰 매핑
     @GetMapping("/user/signup")
     public String signup() {
         return "signup";
     }
 
-    // 회원 가입 요청 처리, 중복 및 오류 체크
+    // 회원 가입 요청 처리, memoService에서 회원가입 조건을 검사한다.
+    // 검사 통과 시 회원가입자 정보가 User DB에 저장되고, 홈 화면으로 리다이렉트 된다.
+    // 검사 미통과 시 에러 메시지가 반환되고, 이 에러 메시지를 model로 뷰에 전달하여 프론트 회원가입 화면에서 에러 메시지가 표시된다.
     @PostMapping("/user/signup")
     public String registerUser(SignupRequestDto requestDto, Model model) {
         try {
@@ -57,5 +59,4 @@ public class UserController {
         }
         return "redirect:/";
     }
-
 }
