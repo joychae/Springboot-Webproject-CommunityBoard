@@ -30,17 +30,17 @@
         <!--        로그인 버튼, 회원가입 버튼-->
         <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/login'" style="margin-left: 10px; margin-bottom: 20px">로그인
         </button>
-        <button th:if="${userName} != null" type="button" class="btn btn-secondary btn-sm float-right" style="margin-left: 10px; margin-bottom: 20px">로그아웃
+        <button th:if="${userName} != null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/logout'" style="margin-left: 10px; margin-bottom: 20px">로그아웃
         </button>
         <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right" onclick="location.href='/user/signup'">회원가입
         </button>
-        <button th:if="${userName} != null" th:text="${userName}" type="button" class="btn btn-secondary btn-sm float-right">
+        <button th:if="${userName} != null" th:text="${userName}+' 마이페이지'" type="button" class="btn btn-secondary btn-sm float-right">
         </button>
         <!--        글 작성하기 버튼-->
         <script type="text/javascript" th:inline="javascript">
             /*<![CDATA[*/
             function loginalert() {
-                alert([[${message}]]);
+                alert("로그인이 필요한 기능입니다");
                 location.href='/user/login';
             }
             /*]]>*/
