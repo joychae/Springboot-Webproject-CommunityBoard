@@ -160,7 +160,7 @@ Entity Table Structure
 회원가입 페이지
 ---------------
 
-UserService
+### UserService
 
 ```
     // 일반 회원가입 기능을 처리하는 메소드
@@ -205,7 +205,10 @@ UserService
 - 가입 조건을 확인하는 로직은 User Entity에 구현할 수도 있지만, Entity Table을 최대한 깨끗하게 관리하기 위해 UserService 내의 메소드로 기입 조건을 확인하는 로직을 구현했습니다.
 - Entity Table을 깨끗하게 관리하는 이유는 두 가지를 꼽을 수 있겠습니다. 첫째, Entity 테이블에 해당하는 코드만 보고도 연결되어 있는 DB Table Column의 구성 요소를 확인하기 위함입니다. 둘째, 어떠한 매개변수와 Dto를 활용해 생성자를 만드는 지 한눈에 파악하기 위함입니다. 따라서 저는 이번프로젝트에서 Entity 코드에는 Column 내용과 생성자, 업데이트 로직만을 구현하였습니다.
 
-UserController
+
+</br>
+
+### UserController
 
 ```
     // 회원 가입을 처리할 url과 signup.html 뷰 매핑
@@ -232,9 +235,8 @@ UserController
     }
 ```
 
-- UserController에서는 깔끔하게 GetMapping 하나와 PostMapping 하나를 구현하였다.
-- UserService에서 회원가입 조건에 맞게 검사하여 Controller에 검사 통과시와 미통과시를 나누어 반환값을 돌려준다.
-
+- UserController에서는 깔끔하게 GetMapping 하나와 PostMapping 하나를 구현하였습니다.
+- UserService에서 회원가입 조건에 맞게 검사하여 Controller에 검사 통과시와 미통과시를 나누어 반환값을 돌려줍니다.
 
 
 
