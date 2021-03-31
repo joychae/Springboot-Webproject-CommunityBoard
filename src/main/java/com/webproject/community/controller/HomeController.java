@@ -42,6 +42,7 @@ public class HomeController {
         model.addAttribute("commentlist", commentService.getComments(memoId));
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());
+            model.addAttribute("loginUsercheck", userDetails.getUser().getUsername());
         } else {
             model.addAttribute("userName", " ");
         }

@@ -59,16 +59,13 @@ function writePost() {
     let title = $('#memo-title').val();
     let contents = $('#memo-contents').val();
 
-    // // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
-    // if (isValidContents(title) == false) {
-    //     return;
-    // }
-    // if (isValidUsername(username) == false) {
-    //     return;
-    // }
-    // if (isValidContents(contents) == false) {
-    //     return;
-    // }
+    // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+    if (isValidContents(title) == false) {
+        return;
+    }
+    if (isValidContents(contents) == false) {
+        return;
+    }
 
     // 3. 전달할 data JSON으로 만듭니다.
     let data = {'title': title, 'contents': contents};
@@ -91,9 +88,15 @@ function getEachMessages(id) {
     window.location.href = `/post/read/${id}`
 }
 
+//// 여기서 부터 댓글 관련 함수입니다.
 // 댓글을 작성합니다.
 function writeComment() {
     let comment = $('#comment').val();
+
+    if (isValidContents(comment) == false) {
+        return;
+    }
+
     let data = {'content': comment}
 
     $.ajax({
@@ -124,7 +127,7 @@ function deleteComment(id) {
     }
 }
 
-    // 댓글을 수정합니다!!
+// 댓글을 수정합니다!!
 function showEdits(id) {
     $(`#${id}-editarea`).show();
     $(`#${id}-submit`).show();
