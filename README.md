@@ -6,6 +6,9 @@ SpringBoot WebProject : CommunityBoard
 - Backend: Java 8
 - Frontend: html, css, javascript (html, css는 부트스트랩을 활용하였습니다.)
 
+
+</br>
+
 개발 환경
 ---------
 - Java: JDK 1.8.0  
@@ -16,6 +19,9 @@ SpringBoot WebProject : CommunityBoard
 > - View Template Engine: thymeleaf  
 > - Sub-Framework: Spring security  
 > - Test-Framework: junit5
+
+
+</br>
 
 폴더 구조
 ---------
@@ -70,6 +76,9 @@ resources
 │  └─ signup.html
 └─ └─ write.html
 ```
+
+
+</br>
 
 
 
