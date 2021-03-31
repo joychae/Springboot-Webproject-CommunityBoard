@@ -36,4 +36,8 @@ public class MemoService {
         );
         return memo;
     }
+
+    public List<Memo> getMemoByUser(Long accountId) {
+        return memoRepository.findByUserIdOrderByModifiedAtDesc(accountId);
+    }
 }

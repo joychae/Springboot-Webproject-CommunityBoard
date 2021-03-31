@@ -19,39 +19,39 @@ function isValidContents(contents) {
 }
 
 // 메모를 불러와서 보여줍니다
-function getMessages() {
-    // 1. 기존 메모 내용을 지웁니다.
-    $('#postings').empty();
-    // 2. 메모 목록을 불러와서 HTML로 붙입니다.
-    $.ajax({
-        type: 'GET',
-        url: '/api/memos',
-        success: function (response) {
-            for (let i = 0; i < response.length; i++) {
-                let message = response[i];
-                let id = message['memoId'];
-                let title = message['title']
-                let usernameId = message['usernameId'];
-                let contents = message['contents'];
-                let modifiedAt = message['modifiedAt'];
-                addHTML(id, title, usernameId, contents, modifiedAt);
-            }
-        }
-    })
-}
-
-// 메모 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
-function addHTML(id, title, usernameId, contents, modifiedAt) {
-    // 1. HTML 태그를 만듭니다.
-    let tempHtml = `
-                <tr onclick="getEachMessages(${id})">
-                    <th scope="row"> ${title} </th>
-                    <td>${usernameId}</td>
-                    <td>${modifiedAt}</td>
-                </tr>`;
-    // 2. #cards-box 에 HTML을 붙인다.
-    $('#postings').append(tempHtml);
-}
+// function getMessages() {
+//     // 1. 기존 메모 내용을 지웁니다.
+//     $('#postings').empty();
+//     // 2. 메모 목록을 불러와서 HTML로 붙입니다.
+//     $.ajax({
+//         type: 'GET',
+//         url: '/api/memos',
+//         success: function (response) {
+//             for (let i = 0; i < response.length; i++) {
+//                 let message = response[i];
+//                 let id = message['memoId'];
+//                 let title = message['title']
+//                 let usernameId = message['usernameId'];
+//                 let contents = message['contents'];
+//                 let modifiedAt = message['modifiedAt'];
+//                 addHTML(id, title, usernameId, contents, modifiedAt);
+//             }
+//         }
+//     })
+// }
+//
+// // 메모 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
+// function addHTML(id, title, usernameId, contents, modifiedAt) {
+//     // 1. HTML 태그를 만듭니다.
+//     let tempHtml = `
+//                 <tr onclick="getEachMessages(${id})">
+//                     <th scope="row"> ${title} </th>
+//                     <td>${usernameId}</td>
+//                     <td>${modifiedAt}</td>
+//                 </tr>`;
+//     // 2. #cards-box 에 HTML을 붙인다.
+//     $('#postings').append(tempHtml);
+// }
 
 // 메모를 생성합니다.
 function writePost() {
@@ -86,6 +86,10 @@ function writePost() {
 // 개별 게시글을 보여줍니다
 function getEachMessages(id) {
     window.location.href = `/post/read/${id}`
+}
+
+function goMypage(id) {
+    window.location.href = `/post/user/${id}`
 }
 
 //// 여기서 부터 댓글 관련 함수입니다.

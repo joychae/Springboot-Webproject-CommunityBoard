@@ -1,5 +1,7 @@
 package com.webproject.community.controller;
 
+import com.webproject.community.model.entity.User;
+import com.webproject.community.repository.UserRepository;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
 import com.webproject.community.service.MemoService;
@@ -10,20 +12,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final MemoService memoService;
     private final CommentService commentService;
+    private final UserRepository userRepository;
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        model.addAttribute("allmemolist", memoService.getAllMemos());
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());
+            Optional<User> users = userRepository.findByUsername(userDetails.getUsername());
+            Long accountId = users.get().getAccountId();
+            model.addAttribute("accountId", accountId);
         }
         if (userDetails == null) {
-            model.addAttribute("message","로그인이 필요한 기능입니다." );
+            model.addAttribute("message", "로그인이 필요한 기능입니다.");
         }
         return "index";
     }
@@ -41,11 +50,21 @@ public class HomeController {
         model.addAttribute("memo", memoService.getEachMemo(memoId));
         model.addAttribute("commentlist", commentService.getComments(memoId));
         if (userDetails != null) {
+            model.addAttribute("user", userDetails.getUser());
             model.addAttribute("userName", userDetails.getUser().getUsername());
             model.addAttribute("loginUsercheck", userDetails.getUser().getUsername());
         } else {
             model.addAttribute("userName", " ");
         }
         return "post";
+    }
+
+    @GetMapping("/post/user/{accountId}")
+    public String getMemoByUser(@PathVariable Long accountId, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        if (userDetails != null) {
+            model.addAttribute("memolist", memoService.getMemoByUser(accountId));
+            model.addAttribute("userName", userDetails.getUser().getUsername());
+        }
+        return "mypage";
     }
 }
