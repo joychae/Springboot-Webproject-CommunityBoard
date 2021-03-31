@@ -161,7 +161,7 @@ Entity Table Structure
 ---------------
 
 <UserService>
-```java
+```
     // 일반 회원가입 기능을 처리하는 메소드
     public void registerUser(SignupRequestDto requestDto) {
     
@@ -205,7 +205,7 @@ Entity Table Structure
 - Entity Table을 깨끗하게 관리하는 이유는 두 가지를 꼽을 수 있겠습니다. 첫째, Entity 테이블에 해당하는 코드만 보고도 연결되어 있는 DB Table Column의 구성 요소를 확인하기 위함입니다. 둘째, 어떠한 매개변수와 Dto를 활용해 생성자를 만드는 지 한눈에 파악하기 위함입니다. 따라서 저는 이번프로젝트에서 Entity 코드에는 Column 내용과 생성자, 업데이트 로직만을 구현하였습니다.
 
 <UserController>
-```java
+```
     // 회원 가입을 처리할 url과 signup.html 뷰 매핑
     @GetMapping("/user/signup")
     public String signup() {
