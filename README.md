@@ -83,6 +83,9 @@ resources
 
 </br>
 
+Entity Table Structure
+----------------------
+<img width="658" alt="community_table_structure" src="https://user-images.githubusercontent.com/79817873/113205459-4635ee80-92a9-11eb-818f-5a3edeab7a3b.PNG">
 
 
 
