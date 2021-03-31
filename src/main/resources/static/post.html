@@ -44,28 +44,37 @@
                         /*<![CDATA[*/
                         function loginalert() {
                             alert([[${message}]]);
-                            location.href='/user/login';
+                            location.href = '/user/login';
                         }
+
                         /*]]>*/
                     </script>
-<!--                    로그인을 안한 유저를 위한 버튼-->
-                    <button th:if="${userName} == null" th:onclick="loginalert()" class="btn btn-outline-secondary" type="button">댓글 작성하기</button>
-<!--                    로그인을 한 유저를 위한 버튼-->
-                    <button th:if="${userName} != null" class="btn btn-outline-secondary" type="button" onclick="writeComment()">댓글 작성하기</button>
+                    <!--                    로그인을 안한 유저를 위한 버튼-->
+                    <button th:if="${userName} == null" th:onclick="loginalert()" class="btn btn-outline-secondary"
+                            type="button">댓글 작성하기
+                    </button>
+                    <!--                    로그인을 한 유저를 위한 버튼-->
+                    <button th:if="${userName} != null" class="btn btn-outline-secondary" type="button"
+                            onclick="writeComment()">댓글 작성하기
+                    </button>
                 </div>
             </div>
 
             <!--        댓글 조회 -->
-            <div  id="comment-area">
+            <div id="comment-area">
                 <div th:each="comment: ${commentlist}" class="card">
                     <div class="card-body">
                         <h6 th:text="${comment.created_by}" class="card-subtitle mb-2 text-muted"></h6>
                         <p th:text="${comment.modifiedAt}" class="card-text"></p>
-                        <p th:text="${comment.content}" id="content" class="card-text"></p>
-                        <textarea id="editarea" style="display: none" cols="30" rows="5"></textarea>
-                        <a th:if="${userName.equals(comment.created_by)}" href="#" class="card-link">댓글 수정하기</a>
-                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'deleteComment('+${comment.id}+')'" href="#" class="card-link">댓글 삭제하기</a>
-                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'editComment('+${comment.id}+')'" style="display: none" href="#" class="card-link">댓글 수정하기</a>
+                        <p th:text="${comment.content}" th:id="${comment.id}+'-content'" class="card-text"></p>
+                        <textarea th:id="${comment.id}+'-editarea'" style="display: none" cols="30"></textarea>
+                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'editComment('+${comment.id}+')'"
+                           th:id="${comment.id}+'-edit'" href="#" class="card-link">댓글 수정하기</a>
+                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'submitEdit('+${comment.id}+')'"
+                           th:id="${comment.id}+'-submit'" style="display: none" href="#" class="card-link">댓글 수정하기</a>
+                        <a th:if="${userName.equals(comment.created_by)}"
+                           th:onclick="'deleteComment('+${comment.id}+')'" th:id="${comment.id}+'-delete'" href="#"
+                           class="card-link">댓글 삭제하기</a>
                     </div>
                 </div>
             </div>

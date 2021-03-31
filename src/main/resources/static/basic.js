@@ -5,6 +5,19 @@ $(document).ready(function () {
     getMessages();
 })
 
+// 내용 유효성 검증 함수입니다.
+function isValidContents(contents) {
+    if (contents == '') {
+        alert('내용을 입력해주세요');
+        return false;
+    }
+    if (contents.trim().length > 5000) {
+        alert('공백 포함 5000자 이하로 입력해주세요');
+        return false;
+    }
+    return true;
+}
+
 // 메모를 불러와서 보여줍니다
 function getMessages() {
     // 1. 기존 메모 내용을 지웁니다.
@@ -68,7 +81,7 @@ function writePost() {
         data: JSON.stringify(data),
         success: function (response) {
             alert('메시지가 성공적으로 작성되었습니다.');
-            window.location.href='/';
+            window.location.href = '/';
         }
     });
 }
@@ -85,7 +98,7 @@ function writeComment() {
 
     $.ajax({
         type: "POST",
-        url: window.location.pathname +"/comment",
+        url: window.location.pathname + "/comment",
         contentType: "application/json", // JSON 형식으로 전달함을 알리기
         data: JSON.stringify(data),
         success: function (response) {
@@ -109,40 +122,45 @@ function deleteComment(id) {
     } else {
         return;
     }
+}
 
     // 댓글을 수정합니다!!
-    function showEdits(id) {
-        $('editarea').show();
-        $('submit').show();
-        $('delete').show();
+function showEdits(id) {
+    $(`#${id}-editarea`).show();
+    $(`#${id}-submit`).show();
+    $(`#${id}-delete`).show();
 
-        $('content').hide();
-        $('edit').hide();
-    }
-
-    function editComment(id) {
-        showEdits(id);
-        let content = $('content').text().trim();
-        $('edit-textarea').val(content);
-    }
-
-    function submitEdit(id) {
-        let content = $('content').text().trim();
-
-        // 3. 전달할 data JSON으로 만듭니다.
-        let data = {'contents': contents};
-
-        // 4. PUT /api/memos/{id} 에 data를 전달합니다.
-        $.ajax({
-            type: "PUT",
-            url: `/api/memos/${id}`,
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function (response) {
-                alert('메시지 변경에 성공하였습니다.');
-                window.location.reload();
-            }
-        });
-    }
+    $(`#${id}-content`).hide();
+    $(`#${id}-edit`).hide();
 }
+
+function editComment(id) {
+    showEdits(id);
+    let content = $(`#${id}-content`).text().trim();
+    $(`#${id}-editarea`).val(content);
+}
+
+function submitEdit(id) {
+    let content = $(`#${id}-editarea`).val().trim();
+
+    if (isValidContents(content) == false) {
+        return;
+    }
+
+    // 3. 전달할 data JSON으로 만듭니다.
+    let data = {'content': content};
+
+    // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+    $.ajax({
+        type: "PUT",
+        url: `/api/comments/${id}`,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (response) {
+            alert('메시지 변경에 성공하였습니다.');
+            window.location.reload();
+        }
+    });
+}
+
 
