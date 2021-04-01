@@ -564,6 +564,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 게시글 조회 페이지
 ---------------
 
+- DB에 있는 모든 게시글을 불러와 목록에 작성일 기준 최신순으로 게시 (게시글 제목, 작성자, 작성일(수정일))
+- Spting Data JPA에서 제공하는 명령문 문법에 맞게 
+
+```java
+public interface MemoRepository extends JpaRepository<Memo, Long> {
+
+    // 게시글 모두 불러온 후, 수정일을 기준으로 최신순 정렬하는 명령문 입니다.
+    List<Memo> findAllByOrderByModifiedAtDesc();
+
+    // 사용자 아이디로 게시글 목록을 찾은 후, 수정일을 기준으로 최신순 정렬하는 명령문 입니다.
+    List<Memo> findByUserIdOrderByModifiedAtDesc(Long id);
+
+    // 게시글을 검색하는 명령문 입니다.
+    List<Memo> findByTitleContaining(String keyword);
+
+}
+```
+
+
+- 게시글 목록의 게시글을 누르면 해당 게시글의 내용, 댓글을 볼 수 있는 상세 페이지로 이동
+- 게시글 목록의 작성자 링크를 누르면 해당 게시글을 작성한 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동
+- "글 작성하기" 버튼을 누르면 게시글 제목과 내용을 작성할 수 있는 페이지로 이동
+- "마이페이지" 버튼을 누르면 로그인한 사용자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동
 
 </br>
 
