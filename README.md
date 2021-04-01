@@ -1,6 +1,7 @@
 SpringBoot WebProject : CommunityBoard  
 =====================
 
+프로젝트 url: http://joychae.shop/ (04.02 기준 localhost에서는 잘 작동하는 카카오 소셜 로그인이 안되는 문제 발생)
 
 </br>
 
