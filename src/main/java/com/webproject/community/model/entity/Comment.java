@@ -2,11 +2,9 @@ package com.webproject.community.model.entity;
 
 import com.webproject.community.model.Timestamped;
 import com.webproject.community.model.dto.CommentRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import org.hibernate.annotations.ColumnDefault;
+import com.webproject.community.service.MemoService;
+import com.webproject.community.service.UserService;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,21 +12,23 @@ import javax.persistence.*;
 @Table(name = "COMMENTS")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가합니다
-    @Column(name = "COMMENTS_NO")
+    @Column(name = "ID")
     private Long id;
 
-    @NonNull
-    @Column(name="MEMO_ID")
-    private Long memoId;
+    // @ManyToOne을 이용한 Entity Table 연관관계 설정 -> 데이터 삽입 시 제약조건으로 작용한다.
+    // 장점1 : 유효성 없는 USER_ID, MEMO_ID를 가지고 있는 데이터는 아예 DB에 들어가지 않도록 거르는 장치이다.
+    // 장점2 : USER_ID, MEMO_ID를 가진 데이터가 삭제된 경우, 삭제된 데이터와 연관관계가 있는 데이터를 자동으로 삭제시켜준다. -> 유효성 검사 자동
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MEMO_ID")
+    private Memo memo;
 
-    @NonNull
-    @Column(name="USER_ID")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @NonNull
     @Column(name="CREATED_BY")
@@ -38,18 +38,11 @@ public class Comment extends Timestamped {
     @Column(name = "CONTENT")
     private String content;
 
-
-    @NonNull
-    @Column(name = "DEL_YN")
-    @ColumnDefault(value = "false")
-    private Boolean deleted;
-
-    public Comment (CommentRequestDto requestDto) {
-        this.memoId = requestDto.getMemoId();
-        this.userId = requestDto.getUserId();
-        this.created_by = requestDto.getCreated_by();
+    public Comment (CommentRequestDto requestDto, MemoService memoService, UserService userService) {
+        this.memo = memoService.findById(requestDto.getMemoId());
+        this.user = userService.findById(requestDto.getUserId());
+        this.created_by = memo.getCreated_by();
         this.content = requestDto.getContent();
-        this.deleted = false;
     }
 
     public void update(CommentRequestDto requestDto) {

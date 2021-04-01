@@ -2,6 +2,7 @@ package com.webproject.community.service;
 
 import com.webproject.community.model.dto.CommentRequestDto;
 import com.webproject.community.model.entity.Comment;
+import com.webproject.community.model.entity.Memo;
 import com.webproject.community.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final MemoService memoService;
+    private final UserService userService;
 
     // 댓글 등록 기능
     public Comment createComment(CommentRequestDto requestDto) {
-        Comment comment = new Comment(requestDto);
+        Comment comment = new Comment(requestDto, memoService, userService);
         commentRepository.save(comment);
         return comment;
     }

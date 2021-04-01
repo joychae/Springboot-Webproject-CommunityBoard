@@ -162,7 +162,7 @@ Entity Table Structure
 
 ### UserService
 
-```
+```java
     // 일반 회원가입 기능을 처리하는 메소드
     public void registerUser(SignupRequestDto requestDto) {
     
@@ -210,7 +210,7 @@ Entity Table Structure
 
 ### UserController
 
-```
+```java
     // 회원 가입을 처리할 url과 signup.html 뷰 매핑
     @GetMapping("/user/signup")
     public String signup() {

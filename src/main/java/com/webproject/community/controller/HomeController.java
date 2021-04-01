@@ -1,7 +1,9 @@
+
 package com.webproject.community.controller;
 
 import com.webproject.community.model.entity.Memo;
 import com.webproject.community.model.entity.User;
+import com.webproject.community.repository.MemoRepository;
 import com.webproject.community.repository.UserRepository;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
@@ -9,6 +11,7 @@ import com.webproject.community.service.MemoService;
 import com.webproject.community.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import java.util.Optional;
 public class HomeController {
 
     private final MemoService memoService;
+    private final MemoRepository memoRepository;
     private final CommentService commentService;
     private final UserService userService;
 
@@ -33,7 +37,7 @@ public class HomeController {
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());
             Optional<User> users = userService.findByUsername(userDetails.getUsername());
-            Long accountId = users.get().getAccountId();
+            Long accountId = users.get().getId();
             model.addAttribute("accountId", accountId);
         }
         if (userDetails == null) {
@@ -71,13 +75,5 @@ public class HomeController {
             model.addAttribute("userName", userDetails.getUser().getUsername());
         }
         return "mypage";
-    }
-
-    // 검색화면
-    @GetMapping("/post/search/{query}")
-    public String search(@PathVariable String query, Model model) {
-        List<Memo> searchList = memoService.memoSearch(query);
-        model.addAttribute("searchlist", searchList);
-        return "search";
     }
 }

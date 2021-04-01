@@ -1,7 +1,10 @@
 package com.webproject.community.service;
 
+import com.webproject.community.exception.InvalidMemoIdException;
+import com.webproject.community.exception.InvalidUserIdException;
 import com.webproject.community.model.dto.KakaoUserInfo;
 import com.webproject.community.model.dto.SignupRequestDto;
+import com.webproject.community.model.entity.Memo;
 import com.webproject.community.model.entity.User;
 import com.webproject.community.repository.UserRepository;
 import com.webproject.community.security.UserDetailsImpl;
@@ -106,6 +109,10 @@ public class UserService {
     // user별로 작성한 글 찾아오기
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new InvalidUserIdException());
     }
 
 }

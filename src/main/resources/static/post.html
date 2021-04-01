@@ -30,7 +30,7 @@
         <h5 th:text="${memo.title}" class="card-header"></h5>
         <!--    게시글 내용 조회 -->
         <div class="card-body">
-            <h5 th:text="${memo.usernameId}" class="card-title"></h5>
+            <h5 th:text="${memo.created_by}" class="card-title"></h5>
             <p th:text="${memo.modifiedAt}" class="card-text"></p>
             <p th:text="${memo.contents}" class="card-text"></p>
 

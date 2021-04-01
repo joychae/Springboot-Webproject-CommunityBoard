@@ -4,6 +4,8 @@ import com.webproject.community.model.dto.CommentRequestDto;
 import com.webproject.community.model.entity.Comment;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
+import com.webproject.community.service.MemoService;
+import com.webproject.community.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ public class CommentController {
     public Comment createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 로그인 되어 있는 ID
         requestDto.setMemoId(memoId);
-        requestDto.setUserId(userDetails.getUser().getAccountId());
+        requestDto.setUserId(userDetails.getUser().getId());
         requestDto.setCreated_by(userDetails.getUser().getUsername());
         Comment comment = commentService.createComment(requestDto);
         return comment;

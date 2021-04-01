@@ -4,6 +4,7 @@ import com.webproject.community.model.dto.MemoRequestDto;
 import com.webproject.community.model.entity.Memo;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.MemoService;
+import com.webproject.community.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,11 @@ public class MemoController {
 
     @PostMapping("/api/memos")
     public Memo createMemo(@RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 로그인 되어 있는 ID
-        Long userId = userDetails.getUser().getAccountId();
-        requestDto.setUsernameId(userDetails.getUser().getUsername());
-        Memo memo = memoService.createMemo(requestDto, userId);
+
+        // 로그인 되어 있는 사용자 정보 가져와서 requestDto에 넣어주기
+        requestDto.setUserId(userDetails.getUser().getId());
+        requestDto.setCreated_by(userDetails.getUsername());
+        Memo memo = memoService.createMemo(requestDto);
         return memo;
     }
 

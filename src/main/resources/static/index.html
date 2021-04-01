@@ -71,10 +71,10 @@
             </tr>
             </thead>
             <tbody th:each="allmemo: ${allmemolist}">
-            <tr th:onclick="|location.href = '/post/read/${allmemo.memoId}'|">
+            <tr th:onclick="|location.href = '/post/read/${allmemo.id}'|">
                 <th th:text="${allmemo.title}" scope="row"></th>
                 <td>
-                    <a th:text="${allmemo.usernameId}" th:href="'/post/user/'+${allmemo.userId}"></a>
+                    <a th:text="${allmemo.created_by}" th:href="'/post/user/'+${allmemo.user.id}"></a>
                 </td>
                 <td th:text="${view}"></td>
                 <td th:text="${allmemo.modifiedAt}"></td>

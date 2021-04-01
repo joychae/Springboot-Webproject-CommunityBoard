@@ -6,7 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemoRequestDto {
+
+    private Long userId;
     private String title;
-    private String usernameId;
+    private String created_by;
     private String contents;
 }

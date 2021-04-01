@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public Long getAccountId() {
-        return user.getAccountId();
+        return user.getId();
     }
 
     @Override
