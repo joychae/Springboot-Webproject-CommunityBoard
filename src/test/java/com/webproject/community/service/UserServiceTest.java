@@ -46,7 +46,7 @@ class UserServiceTest {
             User user = new User(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
 
             // then
-            assertNull(user.getAccountId());
+            assertNull(user.getId());
             assertEquals(username, user.getUsername());
             assertEquals(password, user.getPassword());
             assertEquals(email, user.getEmail());
@@ -155,28 +155,6 @@ class UserServiceTest {
                     });
 
                     assertEquals("비밀번호와 비밀번호 확인이 일치하지 않습니다", exception.getMessage());
-
-                }
-
-            }
-
-            @Nested
-            @DisplayName("중복 사용자 ID 확인")
-            class idcheck {
-
-                @Test
-                @DisplayName("중복 사용자 ID 확인")
-                public void fail1() {
-
-                    String found = "joy";
-                    SignupRequestDto requestDto = new SignupRequestDto(username, password, pwcheck, email);
-
-                    // when
-                    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-                        userService.registerUser(requestDto);
-                    });
-
-                    assertEquals("중복된 사용자 ID가 존재합니다", exception.getMessage());
 
                 }
             }
