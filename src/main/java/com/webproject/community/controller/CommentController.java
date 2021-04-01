@@ -4,8 +4,6 @@ import com.webproject.community.model.dto.CommentRequestDto;
 import com.webproject.community.model.entity.Comment;
 import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
-import com.webproject.community.service.MemoService;
-import com.webproject.community.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
