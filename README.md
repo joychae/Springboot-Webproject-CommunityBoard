@@ -648,9 +648,6 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
 
 게시글 상세 조회 페이지
 ---------------
-- 게시글 상세 조회 페이지입니다. /post/read/{memoId}에 해당하는 view를 내려주는 API를 HomeController에서 관리하고 있습니다.
-- 댓글의 경우 Get 이외의 POST, PUT, DELETE 는 View가 아닌 JSON 형태로 ConmmentController에서 관리하도록 하였습니다.
-- 개인적으로 JSON 형태로 데이터가 오고 가는 것을 선호합니다 (어떤 데이터가 오고 갔는지 좀 더 확실히 판단할 수 있음). 하지만 View형태로 데이터를 반환하고 이를 타임리프로 받아 사용하는 것이 압도적으로 편리해 Get API를 View 형태로 반환해주다보니, CRUD 데이터 반환 형태를 통일하지 못했다는 아쉬움이 남은 프로젝트였습니다.
 
 ### HomeController
 ```java
@@ -771,5 +768,7 @@ public class CommentController {
 </div>
 </body>
 ```
-
+- 게시글 상세 조회 페이지입니다. /post/read/{memoId}에 해당하는 view를 내려주는 API를 HomeController에서 관리하고 있습니다.
+- 댓글의 경우 Get 이외의 POST, PUT, DELETE 는 View가 아닌 JSON 형태로 ConmmentController에서 관리하도록 하였습니다.
+- 개인적으로 JSON 형태로 데이터가 오고 가는 것을 선호합니다 (어떤 데이터가 오고 갔는지 좀 더 확실히 판단할 수 있음). 하지만 View형태로 데이터를 반환하고 이를 타임리프로 받아 사용하는 것이 압도적으로 편리해 Get API를 View 형태로 반환해주다보니, CRUD 데이터 반환 형태를 통일하지 못했다는 아쉬움이 남은 프로젝트였습니다.
 
