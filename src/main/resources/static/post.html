@@ -33,9 +33,12 @@
             <h5 th:text="${memo.user.username}" class="card-title"></h5>
             <p th:text="${memo.modifiedAt}" class="card-text"></p>
             <p th:text="${memo.content}" class="card-text"></p>
+            <a th:if="${userName.equals(memo.user.username)}"
+               th:onclick="'deleteMemo('+${memo.id}+')'" th:id="${memo.id}+'-delete'" href="#"
+               class="card-link">게시글 삭제하기</a>
 
             <!--        댓글 작성 -->
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" style="margin-top: 30px">
                 <input type="text" class="form-control" id="comment" placeholder="댓글을 남겨주세요"
                        aria-label="Recipient's username"
                        aria-describedby="basic-addon2">

@@ -63,7 +63,7 @@ function writePost() {
     }
 
     // 3. 전달할 data JSON으로 만듭니다.
-    let data = {'title': title, 'contents': contents};
+    let data = {'title': title, 'content': contents};
 
     // 4. POST /api/memos 에 data를 전달합니다.
     $.ajax({
@@ -85,6 +85,22 @@ function getEachMessages(id) {
 
 function goMypage(id) {
     window.location.href = `/post/user/${id}`
+}
+
+// 게시글을 삭제합니다.
+function deleteMemo(id) {
+    if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
+        $.ajax({
+            type: "DELETE",
+            url: `/api/memos/${id}`,
+            success: function (response) {
+                alert('메시지 삭제에 성공하였습니다.');
+                window.location.href = '/';
+            }
+        });
+    } else {
+        return;
+    }
 }
 
 //// 여기서 부터 댓글 관련 함수입니다.

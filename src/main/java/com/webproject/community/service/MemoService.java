@@ -50,4 +50,10 @@ public class MemoService {
         return memoRepository.findByUserIdOrderByModifiedAtDesc(accountId);
     }
 
+    // 게시글 삭제 기능
+    public Long deleteMemo(Long id) {
+        memoRepository.deleteById(id);
+        return id;
+    }
+
 }

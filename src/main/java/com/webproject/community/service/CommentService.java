@@ -46,4 +46,10 @@ public class CommentService {
        return id;
     }
 
+    // 게시글 삭제 시 게시글과 연결되어 있는 댓글 삭제
+    public Long deleteCommentByMemoId(Long id) {
+        commentRepository.deleteAllByMemoId(id);
+        return id;
+    }
+
 }
