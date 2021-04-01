@@ -144,6 +144,130 @@ Entity Table Structure
 <img width="658" alt="community_table_structure" src="https://user-images.githubusercontent.com/79817873/113205459-4635ee80-92a9-11eb-818f-5a3edeab7a3b.PNG">
 
 
+### User
+```java
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+public class User extends Timestamped {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long id;
+
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String email;
+
+    // 일반 회원가입루트로 회원가입 한 경우 해당 맴버변수 값이 null 이다.
+    @Column(nullable = true)
+    private Long kakaoId;
+
+    // 카카오 로그인이 아닌 일반 회원가입루트로 회원가입 한 경우 멤버변수 값
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.kakaoId = null;
+    }
+
+    // 카카오 로그인루트로 자동 회원가입 한 경우 멤버변수 값
+    public User(String username, String password, String email, Long kakaoId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.kakaoId = kakaoId;
+    }
+}
+```
+### Memo
+```java
+@Entity
+@Getter
+@NoArgsConstructor
+public class Memo extends Timestamped {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "ID")
+    private Long id;
+
+    // @ManyToOne을 이용한 Entity Table 연관관계 설정 -> 데이터 삽입 시 제약조건으로 작용한다.
+    // 장점1 : 유효성 없는 USER_ID 를 가지고 있는 데이터는 아예 DB에 들어가지 않도록 거르는 장치이다.
+    // 장점2 : USER_ID 를 가진 데이터가 삭제될 경우, 삭제된 데이터와 연관관계가 있는 데이터를 자동으로 삭제시켜준다. -> 유효성 검사 자동
+    // 해당 Comment Entity는 하나의 user 객체와 연결된다.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @NonNull
+    @Column(name = "TITLE") //DB Table에 열을 추가하며, 할당한 항목이 반드시 값을 가지도록 합니다
+    private String title;
+
+    @NonNull
+    @Column(name = "CONTENT")
+    private String content;
+
+    public Memo (MemoRequestDto requestDto, UserService userService) {
+        this.user = userService.findById(requestDto.getUserId()); // UserService 에서 User Id 값으로 User 객체 찾아서 넣어주기
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+    }
+}
+```
+
+### Comment
+```java
+// Entity Table에는 최대한 멤버변수 선언, 생성자, update 로직만 들어가도록 하였다.
+@Entity
+@Getter
+@NoArgsConstructor
+public class Comment extends Timestamped {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다. IDENTITY를 이용하면 다른 Table의 ID 생성에 영향을 받지 않은 채 증가한다.
+    @Column(name = "ID")
+    private Long id;
+
+    // @ManyToOne을 이용한 Entity Table 연관관계 설정 -> 데이터 삽입 시 제약조건으로 작용한다.
+    // 장점1 : 유효성 없는 USER_ID, MEMO_ID를 가지고 있는 데이터는 아예 DB에 들어가지 않도록 거르는 장치이다.
+    // 장점2 : USER_ID, MEMO_ID를 가진 데이터가 삭제될 경우, 삭제된 데이터와 연관관계가 있는 데이터를 자동으로 삭제시켜준다. -> 유효성 검사 자동
+    // 해당 Comment Entity는 하나의 user 객체와 하나의 memo 객체에 연결된다.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MEMO_ID")
+    private Memo memo;
+
+    @NonNull
+    @Column(name = "CONTENT")
+    private String content;
+
+    // Entity 는 스프링 IoC에서 관리되고 있는 Bean 이 아니므로, MemoService 와 UserService 와 의존관계를 생성자 매개변수를 통해 설정하여야 한다.
+    // CommentRequestDto 가 담아온 userId와 memoId 값을 이용해 해당 id 값을 가지고 있는 객체에 담긴 정보를 통채로 가져와서 user, memo 변수에 담아준다.
+    public Comment(CommentRequestDto requestDto, MemoService memoService, UserService userService) {
+        this.user = userService.findById(requestDto.getUserId());
+        this.memo = memoService.findById(requestDto.getMemoId());
+        this.content = requestDto.getContent();
+    }
+
+    // 댓글 내용 수정을 위한 업데이트 메소드이다.
+    public void update(CommentRequestDto requestDto) {
+        this.content = requestDto.getContent();
+    }
+
+}
+```
+
+
 </br>
 
 - 유저, 게시글, 댓글을 관리하는 세 개의 DB Table을 만들어서 관리합니다.  
@@ -217,9 +341,9 @@ Entity Table Structure
         return "signup";
     }
 
-    // 회원 가입 요청 처리, memoService에서 회원가입 조건을 검사한다.
+    // 회원가입 창에서 parameter 값을 받아오는 PostMapping Controller
     // 검사 통과 시 회원가입자 정보가 User DB에 저장되고, 홈 화면으로 리다이렉트 된다.
-    // 검사 미통과 시 에러 메시지가 반환되고, 이 에러 메시지를 model로 뷰에 전달하여 프론트 회원가입 화면에서 에러 메시지가 표시된다. 
+    // 검사 미통과 시 에러 메시지가 반환되고, 이 에러 메시지를 model로 뷰에 전달하여 프론트 회원가입 화면에서 에러 메시지가 표시된다.
     @PostMapping("/user/signup")
     public String registerUser(SignupRequestDto requestDto, Model model) {
         try {
