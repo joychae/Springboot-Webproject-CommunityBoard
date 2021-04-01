@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface MemoRepository extends JpaRepository<Memo, Long> {
 
-    // 게시글 모두 불러온 후, 수정일을 기준으로 최신순 정렬
+    // 게시글 모두 불러온 후, 수정일을 기준으로 최신순 정렬하는 명령문 입니다.
     List<Memo> findAllByOrderByModifiedAtDesc();
 
-    // 사용자 아이디로 게시글 목록을 찾은 후, 수정일을 기준으로 최신순 정렬
+    // 사용자 아이디로 게시글 목록을 찾은 후, 수정일을 기준으로 최신순 정렬하는 명령문 입니다.
     List<Memo> findByUserIdOrderByModifiedAtDesc(Long id);
 
-    // 게시글 검색
+    // 게시글을 검색하는 명령문 입니다.
     List<Memo> findByTitleContaining(String keyword);
 
 }

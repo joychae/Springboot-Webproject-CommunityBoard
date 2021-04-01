@@ -66,7 +66,6 @@
             <tr>
                 <th scope="col">제목</th>
                 <th scope="col">작성자</th>
-                <th scope="col">조회수</th>
                 <th scope="col">작성일</th>
             </tr>
             </thead>
@@ -76,21 +75,20 @@
                 <td>
                     <a th:text="${allmemo.user.username}" th:href="'/post/user/'+${allmemo.user.id}"></a>
                 </td>
-                <td th:text="${view}"></td>
                 <td th:text="${allmemo.modifiedAt}"></td>
             </tr>
             </tbody>
         </table>
-<!--        <form action="/" method="GET">-->
-<!--            <div class="input-group mb-3">-->
-<!--                <div class="input-group-prepend">-->
-<!--                <span class="input-group-text" id="inputGroup-sizing-default"-->
-<!--                      th:onclick="|onlocation.href='/post/search/${query}'|">게시글 검색하기</span>-->
-<!--                </div>-->
-<!--                <input id="keyword" value="query" type="text" class="form-control" aria-label="Default"-->
-<!--                       aria-describedby="inputGroup-sizing-default">-->
-<!--            </div>-->
-<!--        </form>-->
+        <!--        <form action="/" method="GET">-->
+        <!--            <div class="input-group mb-3">-->
+        <!--                <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text" id="inputGroup-sizing-default"-->
+        <!--                      th:onclick="|onlocation.href='/post/search/${query}'|">게시글 검색하기</span>-->
+        <!--                </div>-->
+        <!--                <input id="keyword" value="query" type="text" class="form-control" aria-label="Default"-->
+        <!--                       aria-describedby="inputGroup-sizing-default">-->
+        <!--            </div>-->
+        <!--        </form>-->
     </div>
 </div>
 </body>

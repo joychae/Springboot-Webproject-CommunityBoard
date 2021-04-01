@@ -16,15 +16,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemoService {
 
-    private final MemoRepository memoRepository;
     private final UserService userService;
+    private final MemoRepository memoRepository;
 
-    // DB에 접근해서 모든 게시글 정보 가져오기 (get)
-    public List<Memo> getAllMemos() {
-        return memoRepository.findAllByOrderByModifiedAtDesc();
+    // Memo 객체를 Comment 객체에 연결시키기 위한 사전 작업 처리, Service Layer 에 구현!
+    public Memo findById(Long id) {
+        return memoRepository.findById(id).orElseThrow(()-> new InvalidMemoIdException());
     }
 
-    // 클라이언트에서 보낸 게시글 정보들을 MemoRequestDto 로 객체를 만들어 저장하기
+    // 게시글 생성 기능
     public Memo createMemo(MemoRequestDto requestDto) {
         // 요청받은 DTO 로 DB에 저장할 객체 만들기
         Memo memo = new Memo(requestDto, userService);
@@ -32,7 +32,12 @@ public class MemoService {
         return memo;
     }
 
-    // 게시글 자세히 보기
+    // 게시글 전체 조회 기능
+    public List<Memo> getAllMemos() {
+        return memoRepository.findAllByOrderByModifiedAtDesc();
+    }
+
+    // 게시글 상세 조회 기능
     public Memo getEachMemo(Long id) {
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("찾는 포스팅이 존재하지 않습니다")
@@ -40,12 +45,9 @@ public class MemoService {
         return memo;
     }
 
+    // 게시글 작성자가 쓴 다른 게시글 모아보기 기능
     public List<Memo> getMemoByUser(Long accountId) {
         return memoRepository.findByUserIdOrderByModifiedAtDesc(accountId);
-    }
-
-    public Memo findById(Long id) {
-        return memoRepository.findById(id).orElseThrow(()-> new InvalidMemoIdException());
     }
 
 }

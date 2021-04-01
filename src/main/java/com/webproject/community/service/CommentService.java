@@ -15,11 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final MemoService memoService;
     private final UserService userService;
+    private final MemoService memoService;
+    private final CommentRepository commentRepository;
 
-    // 댓글 등록 기능
+    // 댓글 생성 기능
     public Comment createComment(CommentRequestDto requestDto) {
         Comment comment = new Comment(requestDto, memoService, userService);
         commentRepository.save(comment);
@@ -31,12 +31,6 @@ public class CommentService {
         return commentRepository.findByMemoIdOrderByModifiedAtDesc(memoId);
     }
 
-    // 댓글 삭제 기능
-    public Long deleteComment(Long id) {
-       commentRepository.deleteById(id);
-       return id;
-    }
-
     // 댓글 수정 기능
     public Long commentUpdate(Long id, CommentRequestDto requestDto) {
         Comment comment = commentRepository.findById(id).orElseThrow(
@@ -45,4 +39,11 @@ public class CommentService {
         comment.update(requestDto);
         return comment.getId();
     }
+
+    // 댓글 삭제 기능
+    public Long deleteComment(Long id) {
+       commentRepository.deleteById(id);
+       return id;
+    }
+
 }

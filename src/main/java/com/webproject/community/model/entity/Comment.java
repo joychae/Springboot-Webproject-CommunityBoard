@@ -10,13 +10,12 @@ import javax.persistence.*;
 
 // Entity Table에는 최대한 멤버변수 선언, 생성자, update 로직만 들어가도록 하였다.
 @Entity
-@Table(name = "COMMENTS")
 @Getter
 @NoArgsConstructor
 public class Comment extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가합니다
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID가 자동으로 생성 및 증가한다. IDENTITY를 이용하면 다른 Table의 ID 생성에 영향을 받지 않은 채 증가한다.
     @Column(name = "ID")
     private Long id;
 
@@ -36,13 +35,15 @@ public class Comment extends Timestamped {
     @Column(name = "CONTENT")
     private String content;
 
-    
-    public Comment (CommentRequestDto requestDto, MemoService memoService, UserService userService) {
-        this.memo = memoService.findById(requestDto.getMemoId());
+    // Entity 는 스프링 IoC에서 관리되고 있는 Bean 이 아니므로, MemoService 와 UserService 와 의존관계를 생성자 매개변수를 통해 설정하여야 한다.
+    // CommentRequestDto 가 담아온 userId와 memoId 값을 이용해 해당 id 값을 가지고 있는 객체에 담긴 정보를 통채로 가져와서 user, memo 변수에 담아준다.
+    public Comment(CommentRequestDto requestDto, MemoService memoService, UserService userService) {
         this.user = userService.findById(requestDto.getUserId());
+        this.memo = memoService.findById(requestDto.getMemoId());
         this.content = requestDto.getContent();
     }
 
+    // 댓글 내용 수정을 위한 업데이트 메소드이다.
     public void update(CommentRequestDto requestDto) {
         this.content = requestDto.getContent();
     }

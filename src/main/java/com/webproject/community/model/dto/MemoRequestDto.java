@@ -9,5 +9,6 @@ public class MemoRequestDto {
 
     private Long userId;
     private String title;
-    private String contents;
+    private String content;
+
 }

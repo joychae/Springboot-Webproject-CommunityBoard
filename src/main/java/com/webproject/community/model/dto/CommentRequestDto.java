@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentRequestDto {
 
-    private Long memoId;
     private Long userId;
+    private Long memoId;
     private String content;
 
 }

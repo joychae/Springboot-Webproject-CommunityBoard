@@ -23,13 +23,18 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final KakaoOAuth2 kakaoOAuth2;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    // 1. User Entity 를 Memo, Comment Entity 와 연결시켜주는 사전작업, UserService에 구현!
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new InvalidUserIdException());
+    }
 
-    // 일반 회원가입 기능을 처리하는 메소드
+    // 2. 일반 회원가입 기능을 처리하는 메소드
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
 
@@ -65,7 +70,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 카카오 로그인 기능을 처리하는 메소드
+    // 3. 카카오 로그인 기능을 처리하는 메소드
     public void kakaoLogin(String authorizedCode) {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
@@ -105,15 +110,6 @@ public class UserService {
         UserDetailsImpl userDetails = new UserDetailsImpl(kakaoUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    // user별로 작성한 글 찾아오기
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new InvalidUserIdException());
     }
 
 }

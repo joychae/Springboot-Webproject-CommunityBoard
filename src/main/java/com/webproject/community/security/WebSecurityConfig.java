@@ -13,15 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // 패스워드 인코드를 위한 빈
+    // 패스워드 인코드를 위한 Bean 을 스프링 IoC에 등록하는 과정
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
     }
-
-    // 사용자 로그인 여부 확인
-
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

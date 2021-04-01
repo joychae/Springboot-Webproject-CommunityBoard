@@ -21,18 +21,10 @@ public class CommentController {
     @ResponseBody
     @PostMapping("/post/read/{memoId}/comment")
     public Comment createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 로그인 되어 있는 ID
         requestDto.setMemoId(memoId);
         requestDto.setUserId(userDetails.getUser().getId());
         Comment comment = commentService.createComment(requestDto);
         return comment;
-    }
-
-    // 댓글을 삭제하는 기능입니다.
-    @ResponseBody
-    @DeleteMapping("/api/comments/{id}")
-    public Long deleteComment(@PathVariable Long id) {
-        return commentService.deleteComment(id);
     }
 
     // 댓글을 수정하는 기능입니다.
@@ -43,6 +35,11 @@ public class CommentController {
         return id;
     }
 
-
+    // 댓글을 삭제하는 기능입니다.
+    @ResponseBody
+    @DeleteMapping("/api/comments/{id}")
+    public Long deleteComment(@PathVariable Long id) {
+        return commentService.deleteComment(id);
+    }
 
 }
