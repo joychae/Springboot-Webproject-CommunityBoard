@@ -364,6 +364,123 @@ public class Comment extends Timestamped {
 
 
 
+</br>
+
+로그인 페이지
+---------------
+
+
+</br>
+
+로그인 검사
+---------------
+### WebSecurityConfig
+```java
+@Configuration
+@EnableWebSecurity // 스프링 Security 지원을 가능하게 함
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    // 패스워드 인코드를 위한 Bean 을 스프링 IoC에 등록하는 과정
+    @Bean
+    public BCryptPasswordEncoder encodePassword() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+        http.authorizeRequests()
+                // image 폴더를 login 없이 허용
+                .antMatchers("/images/**").permitAll()
+                // css 폴더를 login 없이 허용
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/basic.js").permitAll()
+                // login없이 허용하는 경로를, 폴더를 지정할 수도 있지만 아래와 같이 도메인명으로 지정할 수도 있음
+                .antMatchers("/").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/post/read/**").permitAll()
+                // 코멘트 여는건 테스트!
+                .antMatchers("/comment").permitAll()
+                .antMatchers("/api/memos/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                // 그 외 모든 요청은 인증과정 필요
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/user/login")
+                .loginProcessingUrl("/user/login")
+                .defaultSuccessUrl("/")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/user/logout")
+                .logoutSuccessUrl("/")
+                .permitAll();
+
+    }
+}
+```
+- Spring Secutiry 클래스인 WebSecurityConfigurerAdapter을 상속받아 Override하여 로그인을 하지 않은 사용자에게 허용하는 url을 커스터마이징 해주었습니다.
+- 허용하고자 하는 파일, url을 .antMatchers("/").permitAll()의 형태로 .anyRequest().authenticated() 위에 기입해주면 됩니다.
+- .anyRequest().authenticated() 위에 permitAll()로 허용되지 않은 url로 로그인을 하지 않은 사용자가 접속할 경우, 로그인 페이지로 자동 이동됩니다.
+- .logoutUrl("/user/login")으로 로그아웃을 진행할 url을 할당하였습니다. 이후 logoutSuccesUrl("/")을 추가해 로그아웃 성공 후 홈 화면으로 리다이렉트 되도록 만들어 주었습니다.
+
+
+</br>
+
+### HomeCotroller
+```java
+    // 홈 페이지 index.html 매핑
+    @GetMapping("/")
+    public String homePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        model.addAttribute("allmemolist", memoService.getAllMemos());
+        // model.addAttribute("query", query);
+        if (userDetails != null) {
+            model.addAttribute("userName", userDetails.getUser().getUsername());
+            Long accountId = userDetails.getUser().getId();
+            model.addAttribute("accountId", accountId);
+        }
+        if (userDetails == null) {
+            model.addAttribute("message", "로그인이 필요한 기능입니다.");
+        }
+        return "index";
+    }
+```
+### index.html
+```html
+        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right"
+                onclick="location.href='/user/login'" style="margin-left: 10px; margin-bottom: 20px">로그인
+        </button>
+        <button th:if="${userName} != null" type="button" class="btn btn-secondary btn-sm float-right"
+                onclick="location.href='/user/logout'" style="margin-left: 10px; margin-bottom: 20px">로그아웃
+        </button>
+        <button th:if="${userName} == null" type="button" class="btn btn-secondary btn-sm float-right"
+                onclick="location.href='/user/signup'">회원가입
+        </button>
+        <button th:if="${userName} != null" th:text="${userName}+' 마이페이지'"
+                th:onclick="|location.href='/post/user/${accountId}'|" type="button"
+                class="btn btn-secondary btn-sm float-right">
+        </button>
+```
+- 로그인 한 사용자의 정보를 담고 있는 UserDeatailsImpl 클래스를 매새 변수로 받아 로그인한 사용자의 아이디를 받아왔습니다.
+- 비로그인 사용자라면 userDeatils 값이 null 일 테니 userName에 해당하는 attribute model도 null 입니다. 이를 활용하여 타임리프 조건문으로 각 조건에 해당하는 버튼을 만들었습니다.
+
+
+
+</br>
+
+게시글 조회 페이지
+---------------
+
+
+</br>
+
+게시글 상세 조회 페이지
+---------------
+
+
 
 
 
