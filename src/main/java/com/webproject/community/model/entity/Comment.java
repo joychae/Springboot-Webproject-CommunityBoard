@@ -31,17 +31,12 @@ public class Comment extends Timestamped {
     private User user;
 
     @NonNull
-    @Column(name="CREATED_BY")
-    private String created_by;
-
-    @NonNull
     @Column(name = "CONTENT")
     private String content;
 
     public Comment (CommentRequestDto requestDto, MemoService memoService, UserService userService) {
         this.memo = memoService.findById(requestDto.getMemoId());
         this.user = userService.findById(requestDto.getUserId());
-        this.created_by = memo.getCreated_by();
         this.content = requestDto.getContent();
     }
 

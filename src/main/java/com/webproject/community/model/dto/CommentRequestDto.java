@@ -11,7 +11,6 @@ public class CommentRequestDto {
 
     private Long memoId;
     private Long userId;
-    private String created_by;
     private String content;
 
 }

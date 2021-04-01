@@ -30,7 +30,6 @@ public class MemoController {
 
         // 로그인 되어 있는 사용자 정보 가져와서 requestDto에 넣어주기
         requestDto.setUserId(userDetails.getUser().getId());
-        requestDto.setCreated_by(userDetails.getUsername());
         Memo memo = memoService.createMemo(requestDto);
         return memo;
     }

@@ -60,7 +60,7 @@
             <tbody th:each="memo: ${memolist}">
             <tr>
                 <th th:text="${memo.title}" scope="row"></th>
-                <td th:text="${memo.created_by}" ></td>
+                <td th:text="${memo.user.username}" ></td>
                 <td th:text="${memo.modifiedAt}" ></td>
             </tr>
             </tbody>

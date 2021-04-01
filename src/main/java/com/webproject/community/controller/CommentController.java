@@ -24,7 +24,6 @@ public class CommentController {
         // 로그인 되어 있는 ID
         requestDto.setMemoId(memoId);
         requestDto.setUserId(userDetails.getUser().getId());
-        requestDto.setCreated_by(userDetails.getUser().getUsername());
         Comment comment = commentService.createComment(requestDto);
         return comment;
     }

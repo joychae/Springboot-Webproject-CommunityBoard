@@ -30,7 +30,7 @@
         <h5 th:text="${memo.title}" class="card-header"></h5>
         <!--    게시글 내용 조회 -->
         <div class="card-body">
-            <h5 th:text="${memo.created_by}" class="card-title"></h5>
+            <h5 th:text="${memo.user.username}" class="card-title"></h5>
             <p th:text="${memo.modifiedAt}" class="card-text"></p>
             <p th:text="${memo.contents}" class="card-text"></p>
 
@@ -64,15 +64,15 @@
             <div id="comment-area">
                 <div th:each="comment: ${commentlist}" class="card">
                     <div class="card-body">
-                        <h6 th:text="${comment.created_by}" class="card-subtitle mb-2 text-muted"></h6>
+                        <h6 th:text="${comment.user.username}" class="card-subtitle mb-2 text-muted"></h6>
                         <p th:text="${comment.modifiedAt}" class="card-text"></p>
                         <p th:text="${comment.content}" th:id="${comment.id}+'-content'" class="card-text"></p>
                         <textarea th:id="${comment.id}+'-editarea'" style="display: none" cols="30"></textarea>
-                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'editComment('+${comment.id}+')'"
+                        <a th:if="${userName.equals(comment.user.username)}" th:onclick="'editComment('+${comment.id}+')'"
                            th:id="${comment.id}+'-edit'" href="#" class="card-link">댓글 수정하기</a>
-                        <a th:if="${userName.equals(comment.created_by)}" th:onclick="'submitEdit('+${comment.id}+')'"
+                        <a th:if="${userName.equals(comment.user.username)}" th:onclick="'submitEdit('+${comment.id}+')'"
                            th:id="${comment.id}+'-submit'" style="display: none" href="#" class="card-link">댓글 수정하기</a>
-                        <a th:if="${userName.equals(comment.created_by)}"
+                        <a th:if="${userName.equals(comment.user.username)}"
                            th:onclick="'deleteComment('+${comment.id}+')'" th:id="${comment.id}+'-delete'" href="#"
                            class="card-link">댓글 삭제하기</a>
                     </div>

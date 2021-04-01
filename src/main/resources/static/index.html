@@ -74,7 +74,7 @@
             <tr th:onclick="|location.href = '/post/read/${allmemo.id}'|">
                 <th th:text="${allmemo.title}" scope="row"></th>
                 <td>
-                    <a th:text="${allmemo.created_by}" th:href="'/post/user/'+${allmemo.user.id}"></a>
+                    <a th:text="${allmemo.user.username}" th:href="'/post/user/'+${allmemo.user.id}"></a>
                 </td>
                 <td th:text="${view}"></td>
                 <td th:text="${allmemo.modifiedAt}"></td>

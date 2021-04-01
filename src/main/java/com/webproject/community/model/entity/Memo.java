@@ -28,15 +28,11 @@ public class Memo extends Timestamped {
     private String title;
 
     @Column(nullable = false)
-    private String created_by;
-
-    @Column(nullable = false)
     private String contents;
 
     public Memo (MemoRequestDto requestDto, UserService userService) {
         this.user = userService.findById(requestDto.getUserId()); // UserService 에서 User Id 값으로 User 객체 찾아서 넣어주기
         this.title = requestDto.getTitle();
-        this.created_by = requestDto.getCreated_by();
         this.contents = requestDto.getContents();
     }
 }
