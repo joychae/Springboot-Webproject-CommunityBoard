@@ -25,11 +25,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final MemoService memoService;
-    private final MemoRepository memoRepository;
-    private final CommentService commentService;
     private final UserService userService;
+    private final MemoService memoService;
+    private final CommentService commentService;
 
+    // 홈페이지
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         model.addAttribute("allmemolist", memoService.getAllMemos());

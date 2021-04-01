@@ -40,6 +40,7 @@ public class UserService {
         // 회원 ID 중복 확인
         // 어떤 때 List 대신 Optional이 쓰이는 지 공부해놓을 필요가 있음
         Optional<User> found = userRepository.findByUsername(username);
+
         if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자 ID가 존재합니다.");
         } else if (requestDto.getUsername().length() < 3) {
