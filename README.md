@@ -272,6 +272,7 @@ public class Comment extends Timestamped {
 
 - 유저, 게시글, 댓글을 관리하는 세 개의 DB Table을 만들어서 관리합니다.  
 - 비즈니스 로직은 최대한 Service Layer에서 해결하고, DB Column과 생성자, DB 업데이트 로직까지만 Enitity에서 관리할 수 있도록 하였습니다.  
+- 개발 초기에는 @ManyToOne을 이용한 Entity Table 연관관계 설정을 해주지 않고, Dto에서 받아온 UserId와 MemoId 값 들을 바로 변수에 할당하였습니다. Entity안에 User, Memo 객체가 아닌 Long userId와 Long memoId 형태로 받았습니다. 하지만 완성 단계에서 @ManyToOne을 도입해 Entity간의 연관관계를 설정하였습니다. 확실히 Entity Table이 어떻게 연관되어 있는지 가시적으로 보기 편한 게 1차적인 장점이었습니다. 이외의 다른 장점도 많았습니다. 두 번째 장점은 Long userId가 아닌 User 객체로 연결되어 있기 떄문에 연결된 User 객체의 데이터를 가져오기 편리했습니다. 예를 들어 게시글의 작성자 값을 가져오고자 했을 때, userId로 일일해 대응되는 username을 찾을 필요 없이 바로 값을 가져올 수 있었다는 점이었습니다. 세 번쨰 장점은 자동으로 유효성 검사가 되는 점이었습니다. 게시글 Dto가 가져온 userId가 유효성이 없는 값인 경우 DB 자체에 게시글 데이터가 저장되지 않습니다. userId 삭제 시 연결된 데이터가 자동 삭제되는 등 편리한 점이 많았습니다.
 
 
 </br>
@@ -667,7 +668,7 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
         return "post";
     }
 ```
-###CommentController
+### CommentController
 ```java
 @Controller
 @RequiredArgsConstructor
