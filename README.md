@@ -1,8 +1,10 @@
 SpringBoot WebProject : CommunityBoard  
 =====================
 
+참여인원 : 1명 (채수연)  
 프로젝트 url:  
-http://joychae.shop/ (04.02 기준 localhost에서는 잘 작동하는 카카오 소셜 로그인이 안되는 문제 발생)  
+http://joychae.shop/  
+04.02 기준 처음 카카오 소셜 로그인 시, 이메일 정보 제공 동의에 체크하지 않으면 해당 아이디로는 영구히 카카오 소셜 로그인 기능을 이용하지 못하는 문제 발생
 
 </br>
 
