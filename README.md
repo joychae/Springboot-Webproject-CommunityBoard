@@ -554,7 +554,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 class="btn btn-secondary btn-sm float-right">
         </button>
 ```
-- 로그인 한 사용자의 정보를 담고 있는 UserDeatailsImpl 클래스를 매새 변수로 받아 로그인한 사용자의 아이디를 받아왔습니다.
+- 로그인 한 사용자의 정보를 담고 있는 UserDeatailsImpl 클래스를 매 변수로 받아 로그인한 사용자의 아이디를 받아왔습니다.
 - 비로그인 사용자라면 userDeatils 값이 null 일 테니 userName에 해당하는 attribute model도 null 입니다. 이를 활용하여 타임리프 조건문으로 각 조건에 해당하는 버튼을 만들었습니다.
 
 
@@ -563,7 +563,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 게시글 조회 페이지
 ---------------
 
-- **DB에 있는 모든 게시글을 불러와 목록에 작성일 기준 최신순으로 게시 (게시글 제목, 작성자, 작성일(수정일))
+**DB에 있는 모든 게시글을 불러와 목록에 작성일 기준 최신순으로 게시 (게시글 제목, 작성자, 작성일(수정일))**
 - Spting Data JPA에서 제공하는 명령문 문법에 맞게 작성하여, 손쉽게 DB에서 원하는 기준으로 값을 찾고 원하는 기준으로 정렬할 수 있었습니다.
 - MemoService 단계를 거치지 않고 바로 HomeController에서 MemoRepository를 DI 받을 수 있지만, 저는 최대한 Controller와 Repository의 직접 연결을 피하였습니다. 전체 코드를 보시면 아시겠지만 제가 작성한 네 개의 Controller는 전부 Repository Layer와 직접 의존관계를 맺지 않고 Service Layer를 거쳐 의존 관계가 설정됩니다. 이렇게 코드를 구현했을 경우 Service Layer만 보았을 때 비즈니스 로직이 무엇인지 Controller까지 꼼꼼히 보지 않아도 빠짐없이 파악할 수 있다는 장점이 있습니다.
 - 클라이언트에서 리스트 형태의 데이터를 View로 내려 받을 때는 th:each 라는 타임리프 반복문을 사용해 화면에 나타나게 하였습니다. 번거로운 java script 반복문을 쓰지 않아 코드가 좀 더 단순해졌습니다.
@@ -611,8 +611,8 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
 
 </br>
 
-- **게시글 목록의 게시글을 누르면 해당 게시글의 내용, 댓글을 볼 수 있는 상세 페이지로 이동
-- **게시글 목록의 작성자 링크를 누르면 해당 게시글을 작성한 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동
+**게시글 목록의 게시글을 누르면 해당 게시글의 내용, 댓글을 볼 수 있는 상세 페이지로 이동**
+**게시글 목록의 작성자 링크를 누르면 해당 게시글을 작성한 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동**
 - 해당 게시글 목록을 클릭하면 타임리프를 활용해 onclick 값을 부여한 링크로 자동 이동되도록 설정하였습니다. ${allmemo.id}는 해당 memo의 id 값을 가져오는 수식입니다. "/" url을 담당하는 Controller에서 allmemolist를 model attribute 값으로 내려주었고, 이를 th:each에서 allmemo 값으로 받았기 때문에 allmemo.id는 각 메모 객체의 id 값을 가리킵니다.
 - ./post/read/{memoId}라는 url에서 게시글 상세 정보를 view에 내려주도록 HomeCotroller에서 관리하고 있습니다.
 - 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로의 이동 역시 th:href로 각 user의 id 값을 경로에 넣어 게시글 상세보기 로직과 비슷하게 구현하였습니다.
@@ -645,6 +645,10 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
 
 게시글 상세 조회 페이지
 ---------------
+- 게시글 상세 조회 페이지입니다. /post/read/{memoId}에 해당하는 view를 내려주는 API를 HomeController에서 관리하고 있습니다.
+- 댓글의 경우 Get 이외의 POST, PUT, DELETE 는 View가 아닌 JSON 형태로 ConmmentController에서 관리하도록 하였습니다.
+- 개인적으로 JSON 형태로 데이터가 오고 가는 것을 선호합니다 (어떤 데이터가 오고 갔는지 좀 더 확실히 판단할 수 있음). 하지만 View형태로 데이터를 반환하고 이를 타임리프로 받아 사용하는 것이 압도적으로 편리해 Get API를 View 형태로 반환해주다보니, CRUD 데이터 반환 형태를 통일하지 못했다는 아쉬움이 남은 프로젝트였습니다.
+
 ### HomeController
 ```java
     // 게시글 상세보기 페이지 post.html 매핑
@@ -665,23 +669,104 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
         return "post";
     }
 ```
+###CommentController
+```java
+@Controller
+@RequiredArgsConstructor
+public class CommentController {
+
+    private final CommentService commentService;
+
+    // 댓글을 작성하는 기능입니다.
+    @ResponseBody
+    @PostMapping("/post/read/{memoId}/comment")
+    public Comment createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        requestDto.setMemoId(memoId);
+        requestDto.setUserId(userDetails.getUser().getId());
+        Comment comment = commentService.createComment(requestDto);
+        return comment;
+    }
+
+    // 댓글을 수정하는 기능입니다.
+    @ResponseBody
+    @PutMapping("/api/comments/{id}")
+    public Long updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.commentUpdate(id, commentRequestDto);
+        return id;
+    }
+
+    // 댓글을 삭제하는 기능입니다.
+    @ResponseBody
+    @DeleteMapping("/api/comments/{id}")
+    public Long deleteComment(@PathVariable Long id) {
+        return commentService.deleteComment(id);
+    }
+}
+```
+
 ### post.html
 ```html
+<body>
+<div id="posting-each">
+    <div class="card">
+        <h5 th:text="${memo.title}" class="card-header"></h5>
         <!--    게시글 내용 조회 -->
         <div class="card-body">
             <h5 th:text="${memo.user.username}" class="card-title"></h5>
             <p th:text="${memo.modifiedAt}" class="card-text"></p>
             <p th:text="${memo.content}" class="card-text"></p>
+
+            <!--        댓글 작성 -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="comment" placeholder="댓글을 남겨주세요"
+                       aria-label="Recipient's username"
+                       aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <script type="text/javascript" th:inline="javascript">
+                        /*<![CDATA[*/
+                        function loginalert() {
+                            alert("로그인이 필요한 기능입니다");
+                            location.href = '/user/login';
+                        }
+
+                        /*]]>*/
+                    </script>
+                    <!--                    로그인을 안한 유저를 위한 버튼-->
+                    <button th:if="${loginUsercheck} == null" th:onclick="loginalert()" class="btn btn-outline-secondary"
+                            type="button">댓글 작성하기
+                    </button>
+                    <!--                    로그인을 한 유저를 위한 버튼-->
+                    <button th:if="${loginUsercheck} != null" class="btn btn-outline-secondary" type="button"
+                            onclick="writeComment()">댓글 작성하기
+                    </button>
+                </div>
+            </div>
+
+            <!--        댓글 조회 -->
+            <div id="comment-area">
+                <div th:each="comment: ${commentlist}" class="card">
+                    <div class="card-body">
+                        <h6 th:text="${comment.user.username}" class="card-subtitle mb-2 text-muted"></h6>
+                        <p th:text="${comment.modifiedAt}" class="card-text"></p>
+                        <p th:text="${comment.content}" th:id="${comment.id}+'-content'" class="card-text"></p>
+                        <textarea th:id="${comment.id}+'-editarea'" style="display: none" cols="30"></textarea>
+                        <a th:if="${userName.equals(comment.user.username)}" th:onclick="'editComment('+${comment.id}+')'"
+                           th:id="${comment.id}+'-edit'" href="#" class="card-link">댓글 수정하기</a>
+                        <a th:if="${userName.equals(comment.user.username)}" th:onclick="'submitEdit('+${comment.id}+')'"
+                           th:id="${comment.id}+'-submit'" style="display: none" href="#" class="card-link">댓글 수정하기</a>
+                        <a th:if="${userName.equals(comment.user.username)}"
+                           th:onclick="'deleteComment('+${comment.id}+')'" th:id="${comment.id}+'-delete'" href="#"
+                           class="card-link">댓글 삭제하기</a>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" style="margin-top:20px;"
+                    onclick="location.href='/'">목록으로 돌아가기
+            </button>
+        </div>
+    </div>
+</div>
+</body>
 ```
-
-
-
-
-
-
-
-
-
-
 
 
