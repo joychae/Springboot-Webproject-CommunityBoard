@@ -563,11 +563,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 게시글 조회 페이지
 ---------------
 
-**DB에 있는 모든 게시글을 불러와 목록에 작성일 기준 최신순으로 게시 (게시글 제목, 작성자, 작성일(수정일))**
-- Spting Data JPA에서 제공하는 명령문 문법에 맞게 작성하여, 손쉽게 DB에서 원하는 기준으로 값을 찾고 원하는 기준으로 정렬할 수 있었습니다.
-- MemoService 단계를 거치지 않고 바로 HomeController에서 MemoRepository를 DI 받을 수 있지만, 저는 최대한 Controller와 Repository의 직접 연결을 피하였습니다. 전체 코드를 보시면 아시겠지만 제가 작성한 네 개의 Controller는 전부 Repository Layer와 직접 의존관계를 맺지 않고 Service Layer를 거쳐 의존 관계가 설정됩니다. 이렇게 코드를 구현했을 경우 Service Layer만 보았을 때 비즈니스 로직이 무엇인지 Controller까지 꼼꼼히 보지 않아도 빠짐없이 파악할 수 있다는 장점이 있습니다.
-- 클라이언트에서 리스트 형태의 데이터를 View로 내려 받을 때는 th:each 라는 타임리프 반복문을 사용해 화면에 나타나게 하였습니다. 번거로운 java script 반복문을 쓰지 않아 코드가 좀 더 단순해졌습니다.
-
 ### MemoRepository
 ```java
 public interface MemoRepository extends JpaRepository<Memo, Long> {
@@ -607,15 +602,13 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
         return "index";
     }
 ```
+**DB에 있는 모든 게시글을 불러와 목록에 작성일 기준 최신순으로 게시 (게시글 제목, 작성자, 작성일(수정일))**
+- Spting Data JPA에서 제공하는 명령문 문법에 맞게 작성하여, 손쉽게 DB에서 원하는 기준으로 값을 찾고 원하는 기준으로 정렬할 수 있었습니다.
+- MemoService 단계를 거치지 않고 바로 HomeController에서 MemoRepository를 DI 받을 수 있지만, 저는 최대한 Controller와 Repository의 직접 연결을 피하였습니다. 전체 코드를 보시면 아시겠지만 제가 작성한 네 개의 Controller는 전부 Repository Layer와 직접 의존관계를 맺지 않고 Service Layer를 거쳐 의존 관계가 설정됩니다. 이렇게 코드를 구현했을 경우 Service Layer만 보았을 때 비즈니스 로직이 무엇인지 Controller까지 꼼꼼히 보지 않아도 빠짐없이 파악할 수 있다는 장점이 있습니다.
+- 클라이언트에서 리스트 형태의 데이터를 View로 내려 받을 때는 th:each 라는 타임리프 반복문을 사용해 화면에 나타나게 하였습니다. 번거로운 java script 반복문을 쓰지 않아 코드가 좀 더 단순해졌습니다.
 
 
 </br>
-
-**게시글 목록의 게시글을 누르면 해당 게시글의 내용, 댓글을 볼 수 있는 상세 페이지로 이동**
-**게시글 목록의 작성자 링크를 누르면 해당 게시글을 작성한 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동**
-- 해당 게시글 목록을 클릭하면 타임리프를 활용해 onclick 값을 부여한 링크로 자동 이동되도록 설정하였습니다. ${allmemo.id}는 해당 memo의 id 값을 가져오는 수식입니다. "/" url을 담당하는 Controller에서 allmemolist를 model attribute 값으로 내려주었고, 이를 th:each에서 allmemo 값으로 받았기 때문에 allmemo.id는 각 메모 객체의 id 값을 가리킵니다.
-- ./post/read/{memoId}라는 url에서 게시글 상세 정보를 view에 내려주도록 HomeCotroller에서 관리하고 있습니다.
-- 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로의 이동 역시 th:href로 각 user의 id 값을 경로에 넣어 게시글 상세보기 로직과 비슷하게 구현하였습니다.
 
 ### index.html
 ```html
@@ -639,6 +632,11 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
             </tbody>
         </table>
 ```
+**게시글 목록의 게시글을 누르면 해당 게시글의 내용, 댓글을 볼 수 있는 상세 페이지로 이동**
+**게시글 목록의 작성자 링크를 누르면 해당 게시글을 작성한 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로 이동**
+- 해당 게시글 목록을 클릭하면 타임리프를 활용해 onclick 값을 부여한 링크로 자동 이동되도록 설정하였습니다. ${allmemo.id}는 해당 memo의 id 값을 가져오는 수식입니다. "/" url을 담당하는 Controller에서 allmemolist를 model attribute 값으로 내려주었고, 이를 th:each에서 allmemo 값으로 받았기 때문에 allmemo.id는 각 메모 객체의 id 값을 가리킵니다.
+- ./post/read/{memoId}라는 url에서 게시글 상세 정보를 view에 내려주도록 HomeCotroller에서 관리하고 있습니다.
+- 작성자가 작성했던 모든 게시글을 볼 수 있는 페이지로의 이동 역시 th:href로 각 user의 id 값을 경로에 넣어 게시글 상세보기 로직과 비슷하게 구현하였습니다.
 
 
 </br>
