@@ -6,6 +6,10 @@ import com.webproject.community.model.entity.Memo;
 import com.webproject.community.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.omg.CORBA.DynAnyPackage.Invalid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,8 +37,10 @@ public class MemoService {
     }
 
     // 게시글 전체 조회 기능
-    public List<Memo> getAllMemos() {
-        return memoRepository.findAllByOrderByModifiedAtDesc();
+    public Page<Memo> getAllMemos(Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1); // page 는 index 처럼 0 부터 시작
+        pageable = PageRequest.of(page, 10);
+        return memoRepository.findAllByOrderByModifiedAtDesc(pageable);
     }
 
     // 게시글 상세 조회 기능

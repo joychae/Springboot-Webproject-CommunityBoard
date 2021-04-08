@@ -1,10 +1,8 @@
 package com.webproject.community.service;
 
-import com.webproject.community.exception.InvalidMemoIdException;
 import com.webproject.community.exception.InvalidUserIdException;
 import com.webproject.community.model.dto.KakaoUserInfo;
 import com.webproject.community.model.dto.SignupRequestDto;
-import com.webproject.community.model.entity.Memo;
 import com.webproject.community.model.entity.User;
 import com.webproject.community.repository.UserRepository;
 import com.webproject.community.security.UserDetailsImpl;
@@ -31,7 +29,7 @@ public class UserService {
 
     // 1. User Entity 를 Memo, Comment Entity 와 연결시켜주는 사전작업, UserService에 구현!
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new InvalidUserIdException());
+        return userRepository.findById(id).orElseThrow(() -> new InvalidUserIdException());
     }
 
     // 2. 일반 회원가입 기능을 처리하는 메소드
@@ -76,34 +74,23 @@ public class UserService {
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
         Long kakaoId = userInfo.getId();
         String nickname = userInfo.getNickname();
-        String email = userInfo.getEmail();
 
         // DB 에 중복된 Kakao Id 가 있는지 확인
         User kakaoUser = userRepository.findByKakaoId(kakaoId)
                 .orElse(null);
 
         if (kakaoUser == null) {
-            // 카카오 이메일과 동일한 이메일을 가진 회원이 있는지 확인
-            User sameEmailUser = userRepository.findByEmail(email).orElse(null);
-            if (sameEmailUser != null) {
-                kakaoUser = sameEmailUser;
-                // 카카오 이메일과 동일한 이메일 회원이 있는 경우
-                // 카카오 Id 를 회원정보에 저장
-                kakaoUser.setKakaoId(kakaoId);
-                userRepository.save(kakaoUser);
 
-            } else {
-                // 카카오 정보로 회원가입
-                // username = 카카오 nickname
-                String username = nickname;
-                // password = 카카오 Id + ADMIN TOKEN
-                String password = kakaoId + ADMIN_TOKEN;
-                // 패스워드 인코딩
-                String encodedPassword = passwordEncoder.encode(password);
+            // 카카오 정보로 회원가입
+            // username = 카카오 nickname
+            String username = nickname;
+            // password = 카카오 Id + ADMIN TOKEN
+            String password = kakaoId + ADMIN_TOKEN;
+            // 패스워드 인코딩
+            String encodedPassword = passwordEncoder.encode(password);
 
-                kakaoUser = new User(username, encodedPassword, email, kakaoId);
-                userRepository.save(kakaoUser);
-            }
+            kakaoUser = new User(username, encodedPassword, kakaoId);
+            userRepository.save(kakaoUser);
         }
 
         // 강제 로그인 처리

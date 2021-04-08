@@ -5,6 +5,8 @@ import com.webproject.community.security.UserDetailsImpl;
 import com.webproject.community.service.CommentService;
 import com.webproject.community.service.MemoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +22,8 @@ public class HomeController {
 
     // 홈 페이지 index.html 매핑
     @GetMapping("/")
-    public String homePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
-        model.addAttribute("allmemolist", memoService.getAllMemos());
+    public String homePage(@PageableDefault Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        model.addAttribute("allmemolist", memoService.getAllMemos(pageable));
         // model.addAttribute("query", query);
         if (userDetails != null) {
             model.addAttribute("userName", userDetails.getUser().getUsername());

@@ -23,7 +23,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String email;
 
     // 일반 회원가입루트로 회원가입 한 경우 해당 맴버변수 값이 null 이다.
@@ -43,6 +43,13 @@ public class User extends Timestamped {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.kakaoId = kakaoId;
+    }
+
+    public User(String username, String password, Long kakaoId) {
+        this.username = username;
+        this.password = password;
+        this.email = null;
         this.kakaoId = kakaoId;
     }
 }

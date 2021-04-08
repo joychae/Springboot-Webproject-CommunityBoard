@@ -79,17 +79,51 @@
             </tr>
             </tbody>
         </table>
-        <!--        <form action="/" method="GET">-->
-        <!--            <div class="input-group mb-3">-->
-        <!--                <div class="input-group-prepend">-->
-        <!--                <span class="input-group-text" id="inputGroup-sizing-default"-->
-        <!--                      th:onclick="|onlocation.href='/post/search/${query}'|">게시글 검색하기</span>-->
-        <!--                </div>-->
-        <!--                <input id="keyword" value="query" type="text" class="form-control" aria-label="Default"-->
-        <!--                       aria-describedby="inputGroup-sizing-default">-->
-        <!--            </div>-->
-        <!--        </form>-->
     </div>
+    <!--    페이지네이션-->
+    <nav aria-label="Page navigation example">
+        <!--표에 사용될 변수값 초기화 -->
+        <ul class="pagination justify-content-center"
+            th:with="start=${T(Math).floor(allmemolist.number/10)*10 + 1},
+                    last=(${start + 9 < allmemolist.totalPages ? start + 9 : allmemolist.totalPages})">
+            <th:block th:with="
+                firstAddr=@{/(page=1)},
+                prevAddr=@{/(page=${allmemolist.number})},
+                nextAddr=@{/(page=${allmemolist.number + 2})},
+                lastAddr=@{/(page=${allmemolist.totalPages})}">
+                <li class="page-item disabled">
+                    <a th:href="${firstAddr}" aria-label="First" class="page-link">
+                        <span aria-hidden="true" >Previous</span>
+                    </a>
+                </li>
+                <!-- 이전 페이지로 가기 버튼 -->
+                <li th:class="${allmemolist.first} ? 'disabled'" class="page-item">
+                    <a th:href="${allmemolist.first} ? '#' :${prevAddr}" class="page-link"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+                <!--1,2,3,4,.. 등 페이지-->
+                <li th:each="page: ${#numbers.sequence(start, last)}"
+                    th:class="${page == allmemolist.number + 1} ? 'active'" class="page-link">
+                    <a th:text="${page}" th:href="@{/(page=${page})}" class="page-link"></a>
+                </li>
+                <!--다음 페이지로 -->
+                <li th:class="${allmemolist.last} ? 'disabled'" class="page-item">
+                    <a th:href="${allmemolist.last} ? '#' : ${nextAddr}"
+                       aria-label="Next">
+                        <span aria-hidden="true" class="page-link">&gt;</span>
+                    </a>
+                </li>
+                <!--맨 마지막 페이지로 이동 -->
+                <li class="page-item">
+                    <a th:href="${lastAddr}" aria-label="Last" class="page-link">
+                        <span aria-hidden="true">Next</span>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </nav>
 </div>
 </body>
 
